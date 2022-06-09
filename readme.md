@@ -1,4 +1,4 @@
-# Regex
+# RegexKit
 
 > Swifty [regular expressions](https://en.wikipedia.org/wiki/Regular_expression)
 

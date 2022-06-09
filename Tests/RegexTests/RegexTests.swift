@@ -1,5 +1,5 @@
 import XCTest
-@testable import Regex
+@testable import RegexKit
 
 final class RegexTests: XCTestCase {
 	func testInit() throws {

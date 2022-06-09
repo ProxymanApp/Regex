@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-	name: "Regex",
+	name: "RegexKit",
 	platforms: [
 		.macOS(.v10_13),
 		.iOS(.v11),
@@ -11,20 +11,20 @@ let package = Package(
 	],
 	products: [
 		.library(
-			name: "Regex",
+			name: "RegexKit",
 			targets: [
-				"Regex"
+				"RegexKit"
 			]
 		)
 	],
 	targets: [
 		.target(
-			name: "Regex"
+			name: "RegexKit"
 		),
 		.testTarget(
 			name: "RegexTests",
 			dependencies: [
-				"Regex"
+				"RegexKit"
 			]
 		)
 	]
