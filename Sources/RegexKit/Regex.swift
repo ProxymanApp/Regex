@@ -111,6 +111,23 @@ extension Regex {
 			Match(checkingResult: $0, string: string)
 		}
 	}
+
+    /**
+    Returns all the matches, including Empty Groups, in the given string.
+
+    ```
+    import Regex
+
+    Regex(#"\d+"#).allMatches(in: "123-456").map(\.value)
+    //=> ["123", "456"]
+    ```
+    */
+    public func allMatchesWithEmptyGroups(in string: String) -> [Match] {
+        nsRegex.matches(in: string).map {
+            Match.buildWithEmptyGroup(checkingResult: $0, string: string)
+        }
+    }
+
 }
 
 // TODO: This needs to include the options too.
@@ -141,7 +158,8 @@ extension Regex {
 	/**
 	A regex match.
 	*/
-	public struct Match: Hashable {
+    public struct Match: Hashable {
+
 		/**
 		A regex match capture group.
 		*/
@@ -223,6 +241,35 @@ extension Regex {
 				return Group(originalString: string, range: range)
 			}
 		}
+
+        // MARK: Proxyman
+
+        internal init(originalString: String, checkingResult: NSTextCheckingResult, value: String, range: Range<String.Index>, groups: [Regex.Match.Group]) {
+            self.originalString = originalString
+            self.checkingResult = checkingResult
+            self.value = value
+            self.range = range
+            self.groups = groups
+        }
+
+        static func buildWithEmptyGroup(checkingResult: NSTextCheckingResult, string: String) -> Match {
+
+            let originalString = string
+            let range = string.rangeBetter(from: checkingResult.range)
+            let value = String(string[range])
+
+            // The first range is the full range, so we ignore that.
+            let groups: [Group] = (1..<checkingResult.numberOfRanges).compactMap {
+                let range = checkingResult.range(at: $0)
+
+                // Do not need to check is range.isNotFound
+                // Include all Emtpy Group
+
+                return Group(originalString: string, range: range)
+            }
+
+            return Match(originalString: originalString, checkingResult: checkingResult, value: value, range: range, groups: groups)
+        }
 	}
 }
 
