@@ -175,6 +175,14 @@ extension Regex {
 			public let range: Range<String.Index>
 
 			fileprivate init(originalString: String, range: NSRange) {
+                guard
+                    !range.isNotFound,
+                    range.length > 0
+                else {
+                    self.range = originalString.rangeBetter(from: NSRange(location: 0, length: 0))
+                    self.value = ""
+                    return
+                }
 				self.range = originalString.rangeBetter(from: range)
 				self.value = String(originalString[self.range])
 			}

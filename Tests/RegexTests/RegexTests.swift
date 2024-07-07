@@ -202,4 +202,16 @@ final class RegexTests: XCTestCase {
 			match.value
 		)
 	}
+
+    func testParseURL_2() throws {
+
+        let regex = Regex(#"^((http[s]?|ws[s]?):\/)?\/?([^:\/\s]+)(:([^\/]*))?((\/?(?:[^\/\?#]+\/+)*)([^\?#]*))(\?([^#]*))?(#(.*))?$"#, options: Regex.Options.caseInsensitive)
+
+        XCTAssertEqual(12, regex.allMatchesWithEmptyGroups(in: "https://domain.com/v1/user?s=323#data").first!.groups.count)
+        XCTAssertEqual(12, regex.allMatchesWithEmptyGroups(in: "proxyman.io").first!.groups.count)
+        XCTAssertEqual(12, regex.allMatchesWithEmptyGroups(in: "https").first!.groups.count)
+        XCTAssertEqual(12, regex.allMatchesWithEmptyGroups(in: "https://🎉.com/data?id=123").first!.groups.count)
+        XCTAssertEqual(12, regex.allMatchesWithEmptyGroups(in: "ws://🎉.com/data?id=123").first!.groups.count)
+        XCTAssertEqual(12, regex.allMatchesWithEmptyGroups(in: "ws://🎉-data.com:3000/data?id=123").first!.groups.count)
+    }
 }
